@@ -20,6 +20,7 @@
   new Vue({el: '#app1'})
 </script>
 
+<hr>
 <h3>bx-entity-selector</h3>
 
 <div id="app2">
@@ -34,7 +35,7 @@
     v-on:cancel="onCancelSelection()"
   ></bx-entity-select>
   <div>
-    <span v-for="item in defaultItems">{{ item.name }}</span>
+    <bx-chip close href="#" v-for="item in defaultItems">{{ item.name }}</bx-chip>
   </div>
 </div>
 
@@ -81,5 +82,36 @@
   })
 </script>
 
+<hr>
+<h3>bx-chip</h3>
+
+<div id="app3">
+  <bx-chip close v-on:close="removeSimple()">Просто текст</bx-chip>
+  <br>
+  <bx-chip v-bind:href="href">Текст со ссылкой</bx-chip>
+</div>
+
+<script>
+  new Vue({
+    el: '#app3',
+    data() {
+      return {
+        href: '/example'
+      }
+    },
+    methods: {
+      removeSimple() {
+        alert('I will die');
+      }
+    }
+  })
+</script>
+
 </body>
 </html>
+<script>
+  import BxChip from "./src/components/BxChip/BxChip";
+  export default {
+    components: {BxChip}
+  }
+</script>
