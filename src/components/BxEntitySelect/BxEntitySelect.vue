@@ -4,14 +4,16 @@
       <div class="form-content">
         <div class="search-container">
           <div class="search-panel">
-            <input>
+            <input v-model="searchString">
           </div>
-          <div class="search-result">
-            <div class="search-item"
-                 v-for="(item, index) in items"
-                 v-on:click="selectItem(index)"
-            >
-              {{item.name}}
+          <div class="search-result-container">
+            <div class="search-result">
+              <div class="search-item"
+                   v-for="(item, index) in items"
+                   v-on:click="selectItem(index)"
+              >
+                {{item.text}}
+              </div>
             </div>
           </div>
         </div>
@@ -24,7 +26,7 @@
               v-on:click="removeSelected(index)">
               &#10008;
             </span>
-            {{item.name}}
+            {{item.text}}
           </div>
         </div>
       </div>
@@ -43,6 +45,7 @@
 <script>
   import BxButton from "../BxButton/BxButton";
   import BxPopup from "../BxPopup/BxPopup";
+  import _ from 'lodash';
 
   export default {
     name: "bx-entity-select",
@@ -78,9 +81,13 @@
     },
     data() {
       return {
+        searchString: '',
         isVisibleLocal: this.isVisible,
         selectedItems: JSON.parse(JSON.stringify(this.defaultItems))
       }
+    },
+    created() {
+      this.debouncedGetItems = _.debounce(this.getItems, 500)
     },
     methods: {
       apply() {
@@ -96,11 +103,20 @@
       },
       removeSelected(index) {
         this.selectedItems.splice(index, 1);
+      },
+      getItems() {
+        this.$emit('search-input', this.searchString);
       }
     },
     watch: {
       isVisible(newValue, oldValue) {
         this.isVisibleLocal = newValue;
+      },
+      defaultItems(newValue, oldValue) {
+        this.selectedItems = JSON.parse(JSON.stringify(newValue));
+      },
+      searchString(newValue) {
+        this.debouncedGetItems();
       }
     }
   }
@@ -116,7 +132,6 @@
 
   .form-content {
     display: flex;
-
   }
 
   .search-panel input {
@@ -129,21 +144,26 @@
     width: 100%;
   }
 
-  .search-result {
+  .search-result-container {
     height: 200px;
     width: 370px;
+    overflow-x: auto;
+    padding: 2px;
     border: 1px solid #cccccc;
+  }
+
+  .search-result {
     display: flex;
-    flex: 1;
+    justify-content: stretch;
     flex-direction: row;
     flex-wrap: wrap;
-    overflow-x: auto;
+    align-items: flex-end;
   }
 
   .search-item {
-    height: 20px;
-    width: 160px;
-    margin: 3px;
+    flex-basis: 50%;
+    box-sizing: border-box;
+    height: 30px;
     padding: 5px;
     cursor: pointer;
   }
@@ -166,6 +186,11 @@
     height: 16px;
     margin: 3px;
     padding: 5px;
+    border: 1px solid #e2e2e2;
+  }
+
+  .selected-item:hover {
+    background-color: #eee;
   }
 
   .selected-item-remove {

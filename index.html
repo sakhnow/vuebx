@@ -33,11 +33,13 @@
     v-bind:cancel-button-text="cancelButton"
     v-on:apply="onItemsSelected($event)"
     v-on:cancel="onCancelSelection()"
+    v-on:search-input="onSearchInput($event)"
   ></bx-entity-select>
   <div>
-    <bx-chip close href="#" v-for="(item, index) in defaultItems"  v-bind:key="item.id" v-on:close="onRemoveItem(index)">
-      {{ item.name }}
+    <bx-chip close href="#" v-for="(item, index) in defaultItems" v-bind:key="item.id" v-on:close="onRemoveItem(index)">
+      {{ item.text }}
     </bx-chip>
+    <input type="hidden" v-for="item in defaultItems" name="item[]" :value="item.id">
   </div>
 </div>
 
@@ -49,23 +51,14 @@
         showEntitySelector: false,
         okButton: 'Выбрать',
         cancelButton: 'Отмена',
+        searchInput: null,
         defaultItems: [
-          {id: 5, name: 'Компания 5'},
+          {id: 5, text: 'Компания 5'},
         ],
         items: [
-          {id: 1, name: 'Компания 1'},
-          {id: 2, name: 'Компания 2'},
-          {id: 3, name: 'Компания 3'},
-          {id: 4, name: 'Компания 4'},
-          {id: 5, name: 'Компания 5'},
-          {id: 6, name: 'Компания 6'},
-          {id: 7, name: 'Компания 7'},
-          {id: 8, name: 'Компания 8'},
-          {id: 9, name: 'Компания 9'},
-          {id: 10, name: 'Компания 10'},
-          {id: 11, name: 'Компания 11'},
-          {id: 12, name: 'Компания 12'},
-          {id: 13, name: 'Компания 13'},
+          {id: 1, text: 'Компания 1'},
+          {id: 2, text: 'Компания 2'},
+          {id: 3, text: 'Компания 3'},
         ]
       }
     },
@@ -82,8 +75,15 @@
       },
       onRemoveItem(index) {
         this.defaultItems.splice(index, 1);
+      },
+      onSearchInput(val) {
+        let result = [];
+        for (let i = 1; i < 15; i++) {
+          result.push({ id: i, text: val + '_' + i });
+        }
+        this.items = result;
       }
-    }
+    },
   })
 </script>
 
