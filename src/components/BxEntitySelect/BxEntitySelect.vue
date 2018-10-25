@@ -31,10 +31,10 @@
         </div>
       </div>
       <div class="button-container">
-        <bx-button class="btn-success" v-on:click.native="apply">
+        <bx-button class="btn-success" v-on:click.native.prevent.stop="apply">
           {{ okButtonText }}
         </bx-button>
-        <bx-button class="btn-link btn-danger" v-on:click.native="cancel">
+        <bx-button class="btn-link btn-danger" v-on:click.native.prevent.stop="cancel">
           {{ cancelButtonText }}
         </bx-button>
       </div>
@@ -163,9 +163,10 @@
   .search-item {
     flex-basis: 50%;
     box-sizing: border-box;
-    height: 30px;
-    padding: 5px;
+    height: 34px;
+    padding: 3px;
     cursor: pointer;
+    overflow: hidden;
   }
 
   .search-item:hover {
@@ -183,10 +184,11 @@
   }
 
   .selected-item {
-    height: 16px;
+    height: 26px;
     margin: 3px;
     padding: 5px;
     border: 1px solid #e2e2e2;
+    overflow: hidden;
   }
 
   .selected-item:hover {
