@@ -111,6 +111,9 @@
     watch: {
       isVisible(newValue, oldValue) {
         this.isVisibleLocal = newValue;
+        if (newValue) {
+          this.selectedItems = JSON.parse(JSON.stringify(this.defaultItems));
+        }
       },
       defaultItems(newValue, oldValue) {
         this.selectedItems = JSON.parse(JSON.stringify(newValue));
